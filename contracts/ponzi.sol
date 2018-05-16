@@ -34,19 +34,23 @@ contract Ponzi {
     }
     //call this function to join the Ponzi's pyramid
     //presentedby is the address of whom invited you
-    function join(address presentedby) public payable returns(bool) {
+    function join(address presentedby) public payable {
         if(msg.value==price){
-            //presenter must be a member of the Ponzi's pyramid
-            if( members[presentedby]==true ){
-                members[msg.sender]==true; // the presented guy join the ponzy's schema
+            //presenter must be a member of the Ponzi's pyramid 
+            //an user already in the pyramid can't join again
+            if( members[presentedby]==true && members[msg.sender] != true){
+                members[msg.sender] = true; // the presented guy join the ponzy's schema
                 partecipantCount++;
-                if( presentedCount[presentedby] >0 && presentedCount[presentedby]%2 == 0){
+                if( presentedCount[presentedby] > 0 && presentedCount[presentedby]%2 == 0){
                     //reward member each couple of presented new members!
                     presentedby.transfer(price);
-                    return true;
-                }
+                 }
+            }else{
+                revert();
             }
+        }else{
+            revert();
         }
-        return false;
+        
     }
 }
