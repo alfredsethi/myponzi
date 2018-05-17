@@ -1,4 +1,4 @@
-const Ponzi = artifacts.require("ponzi");
+const Ponzi = artifacts.require("Ponzi");
 
 contract('test', async (accounts) => {
   var instance;
