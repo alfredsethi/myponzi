@@ -9,6 +9,7 @@ contract Ponzi {
     constructor () public {
         owner = msg.sender;
         members[owner] = true;
+        membersCount = 1;
         price = 10 finney; //milliether 
     } 
     //amount is in wei

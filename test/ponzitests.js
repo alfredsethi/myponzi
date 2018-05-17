@@ -24,6 +24,83 @@ contract('test', async (accounts) => {
     
  }),
 
+ it("can present new user if member of the pyramid", async () => {
+  //let instance = await Ponzi.deployed();
+  //presenter is the contract creator
+  let presenter = accounts[0];
+  let from = accounts[1]; //new user joining the pyramid
+  await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+  let balance = await web3.eth.getBalance(instance.address);
+  
+  assert.equal(balance.valueOf(), web3.toWei(10,"finney"));
+  presenter = from; //new member as a presenter
+  from=accounts[2];  // new entering member
+  await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+  balance = await web3.eth.getBalance(instance.address);
+  //contract must be rewarded
+  assert.equal(balance.valueOf(), web3.toWei(20,"finney")); 
+  let count = await instance.membersCount.call();
+  //should have tree members on the pyramid
+  assert.equal(3,count.toNumber());
+  
+
+}),
+it("receive a reward presenting two users", async () => {
+  //let instance = await Ponzi.deployed();
+  //presenter is the contract creator
+  let presenter = accounts[0];
+  let from = accounts[1]; //new user joining the pyramid
+  //this user will rpesent two members so weneed to check his balance
+  //too se if he's rewarded
+  let userBalance = await web3.eth.getBalance(accounts[1]); 
+  console.log(web3.fromWei(userBalance.toNumber(),"finney"));
+  await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+  let balance = await web3.eth.getBalance(instance.address);
+  assert.equal(balance.valueOf(), web3.toWei(10,"finney"));
+
+  userBalance2 = await web3.eth.getBalance(accounts[1]); 
+  console.log(web3.fromWei(userBalance2.toNumber(),"finney"));
+
+  presenter = from; //new member as a presenter
+  from=accounts[2];  // new entering member
+  await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+
+  balance = await web3.eth.getBalance(instance.address);
+  //contract must be rewarded
+  assert.equal(balance.valueOf(), web3.toWei(20,"finney")); 
+
+  //new user join presented by the new user :) ...
+  from=accounts[3];  // new entering member
+  await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+  let count = await instance.membersCount.call();
+  //should have tree members on the pyramid
+  assert.equal(4,count.toNumber());
+  let userBalanceRewarded = await web3.eth.getBalance(accounts[1]); 
+  let diff = userBalanceRewarded.toNumber()-userBalance.toNumber();
+  console.log(web3.fromWei(userBalanceRewarded.toNumber(),"finney"));
+  assert.equal(diff,web3.toWei(10,"finney"));
+
+}),
+
+ it("can't present new user if not on pyramid", async () => {
+  //let instance = await Ponzi.deployed();
+  //presenter is the contract creator
+  let presenter = accounts[2]; // not on the pyramid
+  let from = accounts[3]; //new user joining the pyramid
+  let countBefore = await instance.membersCount.call();
+  //balance of the presenter, that should get money back since his presentation fails
+  let balanceBefore = await web3.eth.getBalance(accounts[2]);
+  try{
+    await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
+  }catch(error){
+    //we expect an exception
+  }
+  let countAfter = await instance.membersCount.call();
+  let balanceAfter = await web3.eth.getBalance(accounts[2]);
+  assert.equal(countBefore.toNumber(),countAfter.toNumber());
+  assert.equal(balanceBefore.valueOf(),balanceAfter.valueOf());
+}),
+
  it("can't present twice", async () => {
   //let instance = await Ponzi.deployed();
   //presenter is the contract creator
