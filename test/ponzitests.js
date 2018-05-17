@@ -50,17 +50,18 @@ it("receive a reward presenting two users", async () => {
   //presenter is the contract creator
   let presenter = accounts[0];
   let from = accounts[1]; //new user joining the pyramid
-  //this user will rpesent two members so weneed to check his balance
+  //this user will present two members so weneed to check his balance
   //too se if he's rewarded
-  let userBalance = await web3.eth.getBalance(accounts[1]); 
-  console.log(web3.fromWei(userBalance.toNumber(),"finney"));
+  
   await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
   let balance = await web3.eth.getBalance(instance.address);
   assert.equal(balance.valueOf(), web3.toWei(10,"finney"));
 
-  userBalance2 = await web3.eth.getBalance(accounts[1]); 
-  console.log(web3.fromWei(userBalance2.toNumber(),"finney"));
-
+  //this user will present two members so weneed to check his balance
+  //too se if he's rewarded. We check here so we overtake the gas used
+  //in presentation
+  userBalance = await web3.eth.getBalance(accounts[1]); 
+  
   presenter = from; //new member as a presenter
   from=accounts[2];  // new entering member
   await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
@@ -77,7 +78,7 @@ it("receive a reward presenting two users", async () => {
   assert.equal(4,count.toNumber());
   let userBalanceRewarded = await web3.eth.getBalance(accounts[1]); 
   let diff = userBalanceRewarded.toNumber()-userBalance.toNumber();
-  console.log(web3.fromWei(userBalanceRewarded.toNumber(),"finney"));
+  
   assert.equal(diff,web3.toWei(10,"finney"));
 
 }),
