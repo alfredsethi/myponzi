@@ -17,18 +17,18 @@ contract('test', async (accounts) => {
     //let instance = await Ponzi.deployed();
     //presenter is the contract creator
     let presenter = accounts[0];
-    let from = accounts[1]; //new user joining the pyramid
+    let from = accounts[1]; //new user joining the schema
     await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
     let balance = await web3.eth.getBalance(instance.address);
     assert.equal(balance.valueOf(), web3.toWei(10,"finney"));
     
  }),
 
- it("can present new user if member of the pyramid", async () => {
+ it("can present new user if member of the schema", async () => {
   //let instance = await Ponzi.deployed();
   //presenter is the contract creator
   let presenter = accounts[0];
-  let from = accounts[1]; //new user joining the pyramid
+  let from = accounts[1]; //new user joining the schema
   await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
   let balance = await web3.eth.getBalance(instance.address);
   
@@ -40,7 +40,7 @@ contract('test', async (accounts) => {
   //contract must be rewarded
   assert.equal(balance.valueOf(), web3.toWei(20,"finney")); 
   let count = await instance.membersCount.call();
-  //should have tree members on the pyramid
+  //should have tree members on the schema
   assert.equal(3,count.toNumber());
   
 
@@ -49,7 +49,7 @@ it("receive a reward presenting two users", async () => {
   //let instance = await Ponzi.deployed();
   //presenter is the contract creator
   let presenter = accounts[0];
-  let from = accounts[1]; //new user joining the pyramid
+  let from = accounts[1]; //new user joining the schema
   //this user will present two members so weneed to check his balance
   //too se if he's rewarded
   
@@ -74,7 +74,7 @@ it("receive a reward presenting two users", async () => {
   from=accounts[3];  // new entering member
   await instance.join(presenter,{value:web3.toWei(10,"finney"), from:from});
   let count = await instance.membersCount.call();
-  //should have tree members on the pyramid
+  //should have tree members on the schema
   assert.equal(4,count.toNumber());
   let userBalanceRewarded = await web3.eth.getBalance(accounts[1]); 
   let diff = userBalanceRewarded.toNumber()-userBalance.toNumber();
@@ -83,11 +83,11 @@ it("receive a reward presenting two users", async () => {
 
 }),
 
- it("can't present new user if not on pyramid", async () => {
+ it("can't present new user if not on schema", async () => {
   //let instance = await Ponzi.deployed();
   //presenter is the contract creator
-  let presenter = accounts[2]; // not on the pyramid
-  let from = accounts[3]; //new user joining the pyramid
+  let presenter = accounts[2]; // not on the schema
+  let from = accounts[3]; //new user joining the schema
   let countBefore = await instance.membersCount.call();
   //balance of the presenter, that should get money back since his presentation fails
   let balanceBefore = await web3.eth.getBalance(accounts[2]);
