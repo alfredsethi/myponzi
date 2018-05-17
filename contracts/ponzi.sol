@@ -42,6 +42,7 @@ contract Ponzi {
             if( members[presentedby]==true && members[msg.sender] != true){
                 members[msg.sender] = true; // the presented guy join the ponzy's schema
                 membersCount++;
+                presentedCount[presentedby]++;
                 if( presentedCount[presentedby] > 0 && presentedCount[presentedby]%2 == 0){
                     //reward member each couple of presented new members!
                     presentedby.transfer(price);
