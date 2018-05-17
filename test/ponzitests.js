@@ -3,7 +3,7 @@ const Ponzi = artifacts.require("ponzi");
 contract('test', async (accounts) => {
   var instance;
   beforeEach('setup contract for each test', async function () {
-    
+    await Ponzi.deployed();
     instance = await Ponzi.new()
   })
 
