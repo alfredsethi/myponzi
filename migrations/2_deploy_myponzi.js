@@ -1,5 +1,5 @@
-var ponzi = artifacts.require("Ponzi");
+var club = artifacts.require("Club");
 
 module.exports = function(deployer) {
-  deployer.deploy(ponzi);
+  deployer.deploy(club);
 };

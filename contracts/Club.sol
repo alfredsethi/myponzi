@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-contract Ponzi {
+contract Club {
     address public owner;
     uint public price;
     uint public membersCount;

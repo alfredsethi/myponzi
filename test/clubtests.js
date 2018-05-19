@@ -1,20 +1,20 @@
-const Ponzi = artifacts.require("Ponzi");
+const Club = artifacts.require("Club");
 
 contract('test', async (accounts) => {
   var instance;
   beforeEach('setup contract for each test', async function () {
-    await Ponzi.deployed();
-    instance = await Ponzi.new()
+    await Club.deployed();
+    instance = await Club.new()
   })
 
   it("have an initial zero balance", async () => {
-     //let instance = await Ponzi.deployed();
+     
      let balance = await web3.eth.getBalance(instance.address);
      assert.equal(balance.valueOf(), 0);
   }),
  
   it("can present new user", async () => {
-    //let instance = await Ponzi.deployed();
+   
     //presenter is the contract creator
     let presenter = accounts[0];
     let from = accounts[1]; //new user joining the schema
@@ -25,7 +25,7 @@ contract('test', async (accounts) => {
  }),
 
  it("can present new user if member of the schema", async () => {
-  //let instance = await Ponzi.deployed();
+  
   //presenter is the contract creator
   let presenter = accounts[0];
   let from = accounts[1]; //new user joining the schema
@@ -46,7 +46,7 @@ contract('test', async (accounts) => {
 
 }),
 it("receive a reward presenting two users", async () => {
-  //let instance = await Ponzi.deployed();
+  
   //presenter is the contract creator
   let presenter = accounts[0];
   let from = accounts[1]; //new user joining the schema
@@ -84,7 +84,7 @@ it("receive a reward presenting two users", async () => {
 }),
 
  it("can't present new user if not on schema", async () => {
-  //let instance = await Ponzi.deployed();
+  
   //presenter is the contract creator
   let presenter = accounts[2]; // not on the schema
   let from = accounts[3]; //new user joining the schema
@@ -106,7 +106,7 @@ it("receive a reward presenting two users", async () => {
   //let instance = await Ponzi.deployed();
   //presenter is the contract creator
   let presenter = accounts[0];
-  let from = accounts[1]; //new user joining the pyramid
+  let from = accounts[1]; //new user joining the schema
   let countBefore = await instance.membersCount.call();
   try{
     //present once
@@ -124,7 +124,7 @@ it("receive a reward presenting two users", async () => {
   
 }),
   it("can't accept ether without calling join", async()=>{
-    //let instance = await Ponzi.deployed();
+    
     let balance = await web3.eth.getBalance(instance.address);
     try{
       await instance.send(100, {from: accounts[0]})
@@ -135,10 +135,10 @@ it("receive a reward presenting two users", async () => {
     assert.equal(balance.valueOf(),after.valueOf());
   }),
   it("can't join with bad price", async () => {
-    //let instance = await Ponzi.deployed();
+    
     //presenter is the contract creator
     let presenter = accounts[0];
-    let from = accounts[1]; //new user joining the pyramid
+    let from = accounts[1]; //new user joining the schema
     let balance = await web3.eth.getBalance(instance.address);
     try{
       await instance.join(presenter,{value:web3.toWei(11,"finney"), from:from});
